@@ -85,7 +85,7 @@ async function analyzeCode(
 }
 
 function createPrompt(file: File, chunk: Chunk, prDetails: PRDetails): string {
-  const additional_prompt_text = ADDITIONAL_PROMPT_CRITERIA ? ADDITIONAL_PROMPT_CRITERIA.replace(/(?:\r\n|\r|\n)/g, "\n- ") : ""
+  const additional_prompt_text = ADDITIONAL_PROMPT_CRITERIA ? "- " + ADDITIONAL_PROMPT_CRITERIA.replace(/(?:\r\n|\r|\n)/g, "\n- ") + "\n" : ""
   return `Your task is to review pull requests. Instructions:
 - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": "<review comment>"}]}
 - Do not give positive comments or compliments.
