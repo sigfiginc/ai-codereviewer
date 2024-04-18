@@ -9,6 +9,7 @@ const GITHUB_TOKEN: string = core.getInput("GITHUB_TOKEN");
 const OPENAI_API_KEY: string = core.getInput("OPENAI_API_KEY");
 const OPENAI_API_MODEL: string = core.getInput("OPENAI_API_MODEL");
 const OCTOKIT_GITHUB_API_BASE_URL: string = core.getInput("OCTOKIT_GITHUB_API_BASE_URL");
+const ADDITIONAL_PROMPT_CRITERIA: string = core.getInput("ADDITIONAL_PROMPT_CRITERIA")
 
 const octokit = new Octokit({
   auth: GITHUB_TOKEN,
@@ -70,6 +71,7 @@ async function analyzeCode(
     if (file.to === "/dev/null") continue; // Ignore deleted files
     for (const chunk of file.chunks) {
       const prompt = createPrompt(file, chunk, prDetails);
+      console.log("Using prompt:", prompt)
       const aiResponse = await getAIResponse(prompt);
       if (aiResponse) {
         const newComments = createComment(file, chunk, aiResponse);
@@ -83,6 +85,7 @@ async function analyzeCode(
 }
 
 function createPrompt(file: File, chunk: Chunk, prDetails: PRDetails): string {
+  const additional_prompt_text = ADDITIONAL_PROMPT_CRITERIA ? ADDITIONAL_PROMPT_CRITERIA.replace(/(?:\r\n|\r|\n)/g, "\n- ") : ""
   return `Your task is to review pull requests. Instructions:
 - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": "<review comment>"}]}
 - Do not give positive comments or compliments.
@@ -90,7 +93,7 @@ function createPrompt(file: File, chunk: Chunk, prDetails: PRDetails): string {
 - Write the comment in GitHub Markdown format.
 - Use the given description only for the overall context and only comment the code.
 - IMPORTANT: NEVER suggest adding comments to the code.
-
+${additional_prompt_text}
 Review the following code diff in the file "${
     file.to
   }" and take the pull request title and description into account when writing the response.

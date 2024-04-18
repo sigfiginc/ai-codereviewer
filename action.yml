@@ -14,7 +14,10 @@ inputs:
   OCTOKIT_GITHUB_API_BASE_URL:
     description: "GitHub API base URL."
     required: false
-    default: ""
+    default: "https://api.github.com"
+  ADDITIONAL_PROMPT_CRITERIA:
+    description: "additional lines that should be included in the OpenAI prompt"
+    required: false
   exclude:
     description: "Glob patterns to exclude files from the diff analysis"
     required: false
