@@ -11,6 +11,10 @@ inputs:
     description: "OpenAI API model."
     required: false
     default: "gpt-4"
+  OCTOKIT_GITHUB_API_BASE_URL:
+    description: "GitHub API base URL."
+    required: false
+    default: ""
   exclude:
     description: "Glob patterns to exclude files from the diff analysis"
     required: false
