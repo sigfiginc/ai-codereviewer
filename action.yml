@@ -16,7 +16,7 @@ inputs:
     required: false
     default: "https://api.github.com"
   ADDITIONAL_PROMPT_CRITERIA:
-    description: "additional lines that should be included in the OpenAI prompt"
+    description: "additional lines that should be included in the OpenAI prompt.  Each line is a separate criteria item."
     required: false
   exclude:
     description: "Glob patterns to exclude files from the diff analysis"
